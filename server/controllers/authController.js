@@ -2,7 +2,7 @@ const User = require("../models/userSchema");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 
-const adminLayout = './layouts/adminLayout'
+const adminLayout = './layouts/main.ejs'
 
 module.exports = {
   getUserLogin: async (req, res) => {
@@ -10,6 +10,7 @@ module.exports = {
     res.render("user/login", {
       error: req.flash("error"),
       success: req.flash("success"),
+
     });
 
     // req.locals.logout = false
@@ -83,7 +84,7 @@ module.exports = {
 
     req.session.user = user;
     req.flash("success", "User successfully logged in");
-    res.redirect("/logout");
+    res.redirect("/");
   },
 
   logout: async (req, res) => {

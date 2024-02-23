@@ -1,6 +1,6 @@
-const Customer = require("../models/Customer");
+const Customer = require("../models/userSchema");
 //const mongoose= require('mongoose')
-
+const layout= './layouts/main.ejs'
 exports.homepage = async (req, res) => {
   const messages = await req.flash("info");
 
@@ -23,6 +23,7 @@ exports.homepage = async (req, res) => {
       current: page,
       pages: Math.ceil(count / perPage),
       messages,
+      layout
     });
   } catch (error) {
     console.log(error);
@@ -50,7 +51,8 @@ exports.addCustomer = async (req, res) => {
     title: "Add New Customer -NodeJs",
     description: "Free NodeJs User Management System",
   };
-  res.render("customer/add", locals);
+  res.render("/customer/add", {locals,layout});
+  
 };
 
 //post customer
@@ -83,9 +85,10 @@ exports.view = async (req, res) => {
       title: "View Customer Details",
       description: "Free NodeJs User Management System",
     };
-    res.render("/customer/view", {
+    res.render("customer/view", {
       locals,
       customer,
+      layout
     });
   } catch (error) {
     console.log(error);
@@ -100,9 +103,10 @@ exports.edit = async (req, res) => {
            title: "Edit Customer Details",
            description: "Free NodeJs User Management System",
          };
-         res.render("/customer/edit", {
+         res.render("customer/edit", {
            locals,
            customer,
+           layout
          });
        } catch (error) {
          console.log(error);
@@ -155,7 +159,8 @@ exports.searchCustomer = async (req, res) => {
    ]})
   res.render("/search",{
     customers,
-    locals
+    locals,
+    layout
   })
   
   } catch (error) {

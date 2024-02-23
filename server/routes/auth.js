@@ -4,7 +4,7 @@ const router = express.Router();
 const authController = require("../controllers/authController");
 const { registerValidation } = require('../validators/userValidator')
 
-const { isLoggedOut } = require('../middlewares/authMiddleware')
+const { isLoggedOut, isAdminLoggedOut } = require('../middlewares/authMiddleware')
 
 // User registration
 router
@@ -21,19 +21,19 @@ router
 // Admin registration
 router
   .route("/admin/register")
-  .get(  authController.getAdminRegister)
+  .get( isAdminLoggedOut, authController.getAdminRegister)
   .post( registerValidation, authController.adminRegister);
 
 // Admin login
 router
   .route("/admin/login")
-  .get( authController.getAdminLogin)
+  .get(isAdminLoggedOut, authController.getAdminLogin)
   .post(authController.adminLogin);
 
 // User Logout
 
 router
-    .route('/home')
+    .route('/logout')
     .get((req,res)=> { res.redirect('/login')})
     .post(authController.logout)
 
