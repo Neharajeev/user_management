@@ -22,7 +22,7 @@ module.exports = {
     },
     isAdminLoggedOut: (req,res,next) => {
         if(req.session && req.session.user){
-            res.redirect('/')
+            res.redirect('/admin')
         } else {
             next()
         }

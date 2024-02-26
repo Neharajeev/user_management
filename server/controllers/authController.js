@@ -4,6 +4,13 @@ const bcrypt = require("bcrypt");
 
 const adminLayout = './layouts/main.ejs'
 
+const crediential ={
+  email:"admin@gmail.com",
+  password:"123"
+}
+
+
+
 module.exports = {
   getUserLogin: async (req, res) => {
     console.log(req.locals);
@@ -105,98 +112,24 @@ module.exports = {
 
 
   // Admin
-
-
-  getAdminLogin: async (req, res) => {
-    console.log(req.locals);
-    const locals = {
-      title: 'Admin Login'
-    }
-    res.render("admin/login", {
-      locals,
+  getAdminLogin:async(req,res)=>{
+     res.render("admin/login",{
       error: req.flash("error"),
-      success: req.flash("success"),
-      layout: adminLayout
-    });
-
+      success:req.flash("success")
+     })
   },
-  getAdminRegister: async (req, res) => {
-    const locals = {
-      title: 'Admin Login'
+  adminLogin: async (req,res)=>{
+    const {email,password}=req.body
+    if(email!==crediential.email||password!==crediential.password){
+      req.flash("error","Admin does not exist or Invalid Credential")
+      return res.redirect("/admin/login")
     }
-    res.render("admin/register", {
-      locals,
-      error: req.flash("error"),
-      success: req.flash("success"),
-      layout: adminLayout
-    });
+
+    req.session.admin = {email:crediential.email}
+    req.flash("success","Admin successfully logged in")
+    res.redirect("/admin")
   },
-
-  adminRegister: async (req, res) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty) {
-      req.flash(
-        "error",
-        errors.map((err) => err.msg)
-      );
-      return res.redirect("/admin/register");
-    }
-
-    const { username, email, password, confirmPassword } = req.body;
-
-    const existUser = await User.findOne({ email });
-
-    if (existUser) {
-      req.flash("error", "Email already in use");
-      return res.redirect("/admin/register");
-    }
-
-    if (password !== confirmPassword) {
-      req.flash("error", "Password do not match");
-      return res.redirect("/admin/register");
-    }
-
-    const user = new User({
-      username,
-      email,
-      password,
-      isAdmin: true
-    });
-
-    let savedUser = await user.save();
-
-    if (savedUser) {
-      console.log("Admin registered successfully, Please login");
-      req.flash("success", "Admin registered successfully, Please login");
-      return res.redirect("/admin/login");
-    } else {
-      req.flash("error", "Admin registration failed");
-      return res.redirect("/admin/register");
-    }
-  },
-  adminLogin: async (req, res) => {
-    // console.log(req.body);
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email, isAdmin: true });
-
-    if (!user) {
-      req.flash("error", "Admin does not exist or Invalid Credentials");
-      return res.redirect("/admin/login");
-    }
-
-    const isValid = await bcrypt.compare(password, user.password);
-
-    if (!isValid) {
-      req.flash("error", "Invalid Credentials");
-      return res.redirect("/admin/login");
-    }
-
-    req.session.admin = user;
-    req.flash("success", "User successfully logged in");
-    res.redirect("/admin");
-  },
+   
 
   adminLogout: async (req, res) => {
     req.session.destroy((err) => {

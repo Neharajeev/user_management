@@ -103,11 +103,8 @@ exports.edit = async (req, res) => {
            title: "Edit Customer Details",
            description: "Free NodeJs User Management System",
          };
-         res.render("customer/edit", {
-           locals,
-           customer,
-           layout
-         });
+         res.render("customer/edit", {locals,customer,layout})
+          
        } catch (error) {
          console.log(error);
        }
@@ -118,13 +115,13 @@ exports.edit = async (req, res) => {
       try {
        await Customer.findByIdAndUpdate(req.params.id,{
         firstName:req.body.firstName,
-       lastName:req.body.lastNameName,
+       lastName:req.body.lastName,
        tel:req.body.tel,
        email:req.body.email,
        details:req.body.details
       
        })
-       res.redirect(`/edit/${req.params.id}`)
+       res.redirect(`/admin/edit/${req.params.id}`)
 
       } catch (error) {
         console.log(error)
@@ -136,7 +133,7 @@ exports.edit = async (req, res) => {
     exports.deleteCustomer = async (req, res) => {
       try {
         await Customer.deleteOne({_id:req.params.id })
-        res.redirect('/')
+        res.redirect('/admin')
       } catch (error) {
         console.log(error)
       }

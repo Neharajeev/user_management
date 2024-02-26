@@ -18,11 +18,8 @@ router
   .get( isLoggedOut, authController.getUserLogin)
   .post(authController.userLogin);
 
-// Admin registration
-router
-  .route("/admin/register")
-  .get( isAdminLoggedOut, authController.getAdminRegister)
-  .post( registerValidation, authController.adminRegister);
+
+
 
 // Admin login
 router

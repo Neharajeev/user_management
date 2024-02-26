@@ -21,6 +21,22 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    firstName:{
+      type:String,
+      required:true
+  },
+   lastName:{
+      type:String,
+      required:true
+  },
+  tel:{
+      type:String,
+      required:true
+  },
+  details:{
+    type:String,
+    required:true
+}
   },
   { timestamps: true }
 );
